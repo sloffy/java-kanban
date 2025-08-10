@@ -1,3 +1,5 @@
+package ru.common.model;
+
 public class Task {
     private String name;
     private String description;
@@ -22,8 +24,16 @@ public class Task {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Status getStatus() {

@@ -1,3 +1,11 @@
+package ru.common.app;
+
+import ru.common.manager.TaskManager;
+import ru.common.model.Epic;
+import ru.common.model.Status;
+import ru.common.model.Subtask;
+import ru.common.model.Task;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = new TaskManager();
@@ -26,40 +34,40 @@ public class Main {
 
         // Печатаем все эпики, задачи, подзадачи
         System.out.println("Epics:");
-        manager.getEpicList().values().forEach(System.out::println);
+        manager.getEpicList().forEach(System.out::println);
 
         System.out.println("\nTasks:");
-        manager.getTaskList().values().forEach(System.out::println);
+        manager.getTaskList().forEach(System.out::println);
 
         System.out.println("\nSubtasks:");
-        manager.getSubtaskList().values().forEach(System.out::println);
+        manager.getSubtaskList().forEach(System.out::println);
 
         // Изменяем статусы
         task1.setStatus(Status.IN_PROGRESS);
         task2.setStatus(Status.DONE);
-        manager.updateTask(task1, task1.getId());
-        manager.updateTask(task2, task2.getId());
+        manager.updateTask(task1);
+        manager.updateTask(task2);
 
         subtask1.setStatus(Status.DONE);
-        manager.updateSubtask(subtask1, subtask1.getId());
+        manager.updateSubtask(subtask1);
 
         subtask2.setStatus(Status.DONE);
-        manager.updateSubtask(subtask2, subtask2.getId());
+        manager.updateSubtask(subtask2);
 
         subtask3.setStatus(Status.IN_PROGRESS);
-        manager.updateSubtask(subtask3, subtask3.getId());
+        manager.updateSubtask(subtask3);
 
         // Печатаем снова, чтобы проверить статусы эпиков (обновятся автоматически)
         System.out.println("\nAfter status updates:");
 
         System.out.println("Epics:");
-        manager.getEpicList().values().forEach(System.out::println);
+        manager.getEpicList().forEach(System.out::println);
 
         System.out.println("\nTasks:");
-        manager.getTaskList().values().forEach(System.out::println);
+        manager.getTaskList().forEach(System.out::println);
 
         System.out.println("\nSubtasks:");
-        manager.getSubtaskList().values().forEach(System.out::println);
+        manager.getSubtaskList().forEach(System.out::println);
 
         // Удаляем одну задачу и один эпик
         manager.deleteTask(task2.getId());
@@ -68,12 +76,12 @@ public class Main {
         System.out.println("\nAfter deletions:");
 
         System.out.println("Epics:");
-        manager.getEpicList().values().forEach(System.out::println);
+        manager.getEpicList().forEach(System.out::println);
 
         System.out.println("\nTasks:");
-        manager.getTaskList().values().forEach(System.out::println);
+        manager.getTaskList().forEach(System.out::println);
 
         System.out.println("\nSubtasks:");
-        manager.getSubtaskList().values().forEach(System.out::println);
+        manager.getSubtaskList().forEach(System.out::println);
     }
 }

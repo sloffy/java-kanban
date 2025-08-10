@@ -1,6 +1,8 @@
+package ru.common.model;
+
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private ArrayList<Subtask> epicSubtasks;
 
     public Epic(String name, String description) {
@@ -10,13 +12,11 @@ public class Epic extends Task{
 
     public void addSubtaskToEpic(Subtask subtask) {
         epicSubtasks.add(subtask);
-        updateEpicStatus();
     }
 
     public void updateSubtaskInEpic(Subtask subtask) {
         int index = epicSubtasks.indexOf(subtask);
         epicSubtasks.set(index, subtask);
-        updateEpicStatus();
     }
 
     public boolean removeSubtaskFromEpic(Subtask subtask) {
@@ -24,7 +24,6 @@ public class Epic extends Task{
             return false;
         }
         epicSubtasks.remove(subtask);
-        updateEpicStatus();
         return true;
     }
 
@@ -32,32 +31,7 @@ public class Epic extends Task{
         return new ArrayList<>(epicSubtasks);
     }
 
-    private void updateEpicStatus() {
-        if (epicSubtasks.isEmpty()) {
-            setStatus(Status.NEW);
-            return;
-        }
 
-        boolean allNew = true;
-        boolean allDone = true;
-
-        for (Subtask st : epicSubtasks) {
-            if (st.getStatus() != Status.NEW) {
-                allNew = false;
-            }
-            if (st.getStatus() != Status.DONE) {
-                allDone = false;
-            }
-        }
-
-        if (allNew) {
-            setStatus(Status.NEW);
-        } else if (allDone) {
-            setStatus(Status.DONE);
-        } else {
-            setStatus(Status.IN_PROGRESS);
-        }
-    }
 
     @Override
     public String toString() {
