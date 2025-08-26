@@ -5,185 +5,58 @@ import ru.common.model.Status;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.List;
 
-public class TaskManager {
-    private HashMap<Integer, Task> taskList;
-    private HashMap<Integer, Epic> epicList;
-    private HashMap<Integer, Subtask> subtaskList;
-
-    private int nextId;
-
-    public TaskManager() {
-        taskList = new HashMap<>();
-        epicList = new HashMap<>();
-        subtaskList = new HashMap<>();
-
-        nextId = 0;
-    }
-
+public interface TaskManager {
     //Создание задачи
-    public void addTask(Task task) {
-        task.setId(nextId);
-        taskList.put(task.getId(), task);
-        updateNextId();
-    }
+    void addTask(Task task);
 
-    public void addEpic(Epic epic) {
-        epic.setId(nextId);
-        epicList.put(epic.getId(), epic);
-        updateNextId();
-    }
+    void addEpic(Epic epic);
 
-    public boolean addSubtask(Subtask subtask) {
-        Epic epic = epicList.get(subtask.getEpicId());
-        if (epic == null) {
-            return false;
-        }
-        subtask.setId(nextId);
-        subtaskList.put(subtask.getId(), subtask);
-        epic.addSubtaskToEpic(subtask);
-        updateEpicStatus(epic);
-        updateNextId();
-        return true;
-    }
+    boolean addSubtask(Subtask subtask);
 
     //Обновление задачи
-    public boolean updateTask(Task updatedTask) {
-        Task task = taskList.get(updatedTask.getId());
-        if (task == null) {
-            return false;
-        }
-        task.setName(updatedTask.getName());
-        task.setDescription(updatedTask.getDescription());
-        task.setStatus(updatedTask.getStatus());
-        return true;
-    }
+    boolean updateTask(Task updatedTask);
 
-    public boolean updateEpic(Epic updatedEpic) {
-        Epic existingEpic = epicList.get(updatedEpic.getId());
-        if (existingEpic == null) {
-            return false;
-        }
+    boolean updateEpic(Epic updatedEpic);
 
-        existingEpic.setName(updatedEpic.getName());
-        existingEpic.setDescription(updatedEpic.getDescription());
-        existingEpic.setStatus(updatedEpic.getStatus());
-
-        return true;
-    }
-
-    public boolean updateSubtask(Subtask updatedSubtask) {
-        Subtask existingSubtask = subtaskList.get(updatedSubtask.getId());
-        if (existingSubtask == null) {
-            return false;
-        }
-
-        existingSubtask.setName(updatedSubtask.getName());
-        existingSubtask.setDescription(updatedSubtask.getDescription());
-        existingSubtask.setStatus(updatedSubtask.getStatus());
-        existingSubtask.setEpicId(updatedSubtask.getEpicId());
-
-        Epic epic = epicList.get(existingSubtask.getEpicId());
-        if (epic != null) {
-            epic.updateSubtaskInEpic(existingSubtask);
-            updateEpicStatus(epic);
-        }
-
-        return true;
-    }
+    boolean updateSubtask(Subtask updatedSubtask);
 
     //Удаление задачи
-    public boolean deleteTask(int id) {
-        if (!taskList.containsKey(id)) {
-            return false;
-        }
-        taskList.remove(id);
-        return true;
-    }
+    boolean deleteTask(int id);
 
-    public boolean deleteEpic(int id) {
-        if (!epicList.containsKey(id)) {
-            return false;
-        }
-        for (Integer subtaskId : new ArrayList<>(subtaskList.keySet())) {
-            Subtask subtask = subtaskList.get(subtaskId);
-            if (subtask.getEpicId() == id) {
-                subtaskList.remove(subtask.getId());
-            }
-        }
-        epicList.remove(id);
-        return true;
-    }
+    boolean deleteEpic(int id);
 
-    public boolean deleteSubtask(int id) {
-        if (!subtaskList.containsKey(id)) {
-            return false;
-        }
-        Subtask subtask = subtaskList.get(id);
-        Epic epic = epicList.get(subtask.getEpicId());
-        epic.removeSubtaskFromEpic(subtask);
-        subtaskList.remove(id);
-        updateEpicStatus(epic);
-        return true;
-    }
+    boolean deleteSubtask(int id);
 
     //Получение списка всех задач
-    public ArrayList<Task> getTaskList() {
-        return new ArrayList<>(taskList.values());
-    }
+    ArrayList<Task> getTaskList();
 
-    public ArrayList<Epic> getEpicList() {
-        return new ArrayList<>(epicList.values());
-    }
+    ArrayList<Epic> getEpicList();
 
-    public ArrayList<Subtask> getSubtaskList() {
-        return new ArrayList<>(subtaskList.values());
-    }
+    ArrayList<Subtask> getSubtaskList();
 
     //Удаление всех задач
-    public void clearTaskList() {
-        taskList.clear();
-    }
+    void clearTaskList();
 
-    public void clearEpicList() {
-        epicList.clear();
-    }
+    void clearEpicList();
 
-    public void clearSubtaskList() {
-        subtaskList.clear();
-    }
+    void clearSubtaskList();
 
     //Получение по индификатору
-    public Task getTaskById(int id) {
-        return taskList.get(id);
-    }
+    Task getTaskById(int id);
 
-    public Epic getEpicById(int id) {
-        return epicList.get(id);
-    }
+    Epic getEpicById(int id);
 
-    public Subtask getSubtaskById(int id) {
-        return subtaskList.get(id);
-    }
+    Subtask getSubtaskById(int id);
 
-    //Получение всех подзадач определённого эпика
-    public ArrayList<Subtask> getEpicSubtasksById(int id) {
-        Epic epic = epicList.get(id);
-        if (epic == null) {
-            return null;
-        }
-        return epic.getEpicSubtasks();
-    }
+    ArrayList<Subtask> getEpicSubtasksById(int id);
 
-    //Обновление счётчика ID
-    public void updateNextId() {
-        nextId++;
-    }
+    List<Task> getHistory();
 
     //Обновление статуса Эпика
-    private void updateEpicStatus(Epic epic) {
+    default void updateEpicStatus(Epic epic) {
         if (epic.getEpicSubtasks().isEmpty()) {
             epic.setStatus(Status.NEW);
             return;
@@ -209,5 +82,4 @@ public class TaskManager {
             epic.setStatus(Status.IN_PROGRESS);
         }
     }
-
 }
