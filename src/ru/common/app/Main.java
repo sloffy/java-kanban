@@ -91,7 +91,6 @@ public class Main {
         taskManager.getTaskById(task1.getId());
         taskManager.getEpicById(epic2.getId());
         taskManager.getSubtaskById(subtask3.getId());
-        taskManager.getSubtaskById(subtask1.getId());
 
         // Печатаем историю
         System.out.println("History of viewed tasks:");

@@ -15,12 +15,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int nextId;
 
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private HistoryManager historyManager;
 
-    public InMemoryTaskManager() {
+    public InMemoryTaskManager(HistoryManager historyManager) {
         taskList = new HashMap<>();
         epicList = new HashMap<>();
         subtaskList = new HashMap<>();
+        this.historyManager = historyManager;
 
         nextId = 0;
     }
@@ -43,9 +44,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean addSubtask(Subtask subtask) {
         Epic epic = epicList.get(subtask.getEpicId());
-        if (epic == null) {
-            return false;
-        }
+
+        if (epic == null) return false;
+
         subtask.setId(nextId);
         subtaskList.put(subtask.getId(), subtask);
         epic.addSubtaskToEpic(subtask);

@@ -18,10 +18,11 @@ public class InMemoryHistoryManager  implements HistoryManager{
         return new ArrayList<>(historyList);
     }
 
-    @Override
     public boolean addToHistory(Task task){
         if (task == null) return false;
-        historyList.add(task);
+        Task taskCopy = new Task(task.getName(), task.getDescription(), task.getStatus());
+        taskCopy.setId(task.getId());
+        historyList.add(taskCopy);
         if (historyList.size() > 10) {
             historyList.remove(0);
         }
