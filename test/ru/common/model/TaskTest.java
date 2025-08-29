@@ -1,9 +1,7 @@
-package ru.common.model.tests;
+package ru.common.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.common.model.Status;
-import ru.common.model.Task;
 
 import static org.junit.jupiter.api.Assertions.*;
 

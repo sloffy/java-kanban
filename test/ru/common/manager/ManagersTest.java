@@ -1,9 +1,6 @@
-package ru.common.manager.tests;
+package ru.common.manager;
 
 import org.junit.jupiter.api.Test;
-import ru.common.manager.Managers;
-import ru.common.manager.TaskManager;
-import ru.common.manager.HistoryManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 

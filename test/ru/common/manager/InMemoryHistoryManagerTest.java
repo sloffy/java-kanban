@@ -1,9 +1,7 @@
-package ru.common.manager.tests;
+package ru.common.manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.common.manager.TaskManager;
-import ru.common.manager.Managers;
 import ru.common.model.Status;
 import ru.common.model.Task;
 
@@ -21,11 +19,12 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldPreserveTaskStateInHistory() {
+    void shouldReflectTaskChangesInHistory() {
         Task task = new Task("Task 1", "Description", Status.NEW);
         manager.addTask(task);
         manager.getTaskById(task.getId());
 
+        // меняем задачу
         task.setName("Updated Task");
         task.setStatus(Status.DONE);
 
@@ -33,10 +32,10 @@ class InMemoryHistoryManagerTest {
 
         assertEquals(1, history.size());
         Task historyTask = history.get(0);
-        
-        assertEquals("Task 1", historyTask.getName(),
-                "История должна сохранять прежнее имя задачи");
-        assertEquals(Status.NEW, historyTask.getStatus(),
-                "История должна сохранять прежний статус задачи");
+
+        assertEquals("Updated Task", historyTask.getName(),
+                "История должна ссылаться на актуальное имя задачи");
+        assertEquals(Status.DONE, historyTask.getStatus(),
+                "История должна ссылаться на актуальный статус задачи");
     }
 }
